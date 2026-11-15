@@ -105,12 +105,28 @@ jobs:
           ./dist/toupie_arena.exe --smoke-test | Out-Null
           Compress-Archive -Path dist/* -DestinationPath "TopArena-${{ github.ref_name }}-windows-x64.zip"
 
+      # Installateur (première installation : menu Démarrer, bureau, désinstallation) ; le zip
+      # ci-dessus reste le paquet des mises à jour automatiques.
+      - name: Installateur Windows (Inno Setup)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress | Out-Null }
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          & $iscc "/DAppVersion=$version" "/DSourceDir=$PWD\dist" "/DOutputDir=$PWD" packaging/windows/top-arena.iss
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
       - name: Paquet macOS (dmg)
         if: runner.os == 'macOS'
         run: |
-          macdeployqt build/src/toupie_arena.app -dmg
+          macdeployqt build/src/toupie_arena.app
           ./build/src/toupie_arena.app/Contents/MacOS/toupie_arena --smoke-test
-          mv build/src/toupie_arena.dmg "TopArena-${{ github.ref_name }}-macos.dmg"
+          # Glisser « Top Arena » sur le raccourci Applications pour l'installer.
+          mkdir dmg
+          cp -R build/src/toupie_arena.app "dmg/Top Arena.app"
+          ln -s /Applications dmg/Applications
+          hdiutil create -volname "Top Arena" -srcfolder dmg -ov -format UDZO "TopArena-${{ github.ref_name }}-macos.dmg"
 
       - name: Archive du paquet
         uses: actions/upload-artifact@v4
@@ -119,6 +135,7 @@ jobs:
           path: |
             TopArena-*.AppImage
             TopArena-*.zip
+            TopArena-*-setup.exe
             TopArena-*.dmg
           if-no-files-found: error
 

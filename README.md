@@ -356,6 +356,18 @@ Fonctionnement :
 - **Compatibilité** : le client envoie la version du protocole et une empreinte du catalogue
   de pièces ; l'hôte refuse les versions différentes.
 
+## Installation
+
+Les paquets sont dans les [releases](https://github.com/valentinRyckaert/Top-Arena/releases) :
+
+| Système | Paquet | Installation |
+|---------|--------|--------------|
+| Windows | `…-windows-x64-setup.exe` | installateur sans droits administrateur (dossier `%LOCALAPPDATA%\Programs\Top Arena`), raccourcis menu Démarrer et bureau, désinstallation depuis les paramètres de Windows |
+| Linux   | `…-linux-x86_64.AppImage` | rendre le fichier exécutable et le lancer : au premier lancement, le jeu propose de s'installer dans le menu des applications (copie dans `~/Applications`, entrée `top-arena.desktop`) ; le fichier téléchargé peut ensuite être supprimé |
+| macOS   | `…-macos.dmg` | glisser « Top Arena » sur le raccourci Applications |
+
+Chaque installation reste accessible en écriture, ce qui permet au jeu de se mettre à jour seul.
+
 ## Mises à jour
 
 Le bouton **Mises à jour** du menu interroge la dernière release GitHub du projet et compare
@@ -381,7 +393,7 @@ distribution, dossier en lecture seule) propose d'ouvrir la page de télécharge
   - Linux avec AddressSanitizer et UndefinedBehaviorSanitizer ;
   - Linux, Windows (MSVC) et macOS avec Qt 6.8 LTS : compilation, tests, binaires en artefacts.
 - **CD** ([`release.yml`](.github/workflows/release.yml), à chaque tag `vX.Y.Z`) : compilation
-  et tests sur les trois systèmes, paquets AppImage (Linux), zip (Windows) et dmg (macOS),
+  et tests sur les trois systèmes, paquets AppImage (Linux), installateur et zip (Windows) et dmg (macOS),
   vérification du démarrage de chaque paquet, publication dans une release GitHub dont les notes
   reprennent la section du tag dans [`CHANGELOG.md`](CHANGELOG.md).
 
@@ -396,7 +408,7 @@ Tests (`ctest`) :
 | `tst_core`   | stats, types, catalogue, boulons, persistance JSON |
 | `tst_battle` | formules, dash, pilotage, recentrage, force de lancer, coups spéciaux (une fois par partie, coût) et effets, duels (déclenchement, raté à 1,5× les dégâts, nul, inactivité, bots), règles, stadiums, mêlées, abandons, déterminisme, niveaux de bot ordonnés |
 | `tst_tournament` | score express et classique, ordre des toupies, calendrier de ligue (chacun rencontre chacun), classement, tableau à élimination directe avec exemptions, JSON, match entre bots |
-| `tst_net`    | lobby (connexion, refus, déconnexion), découverte UDP et par balayage TCP, encodage de l'état (duel, score, bots), partie réseau de bout en bout, tournoi solo et tournoi en réseau, recherche de mise à jour, remplacement et relance d'une AppImage |
+| `tst_net`    | lobby (connexion, refus, déconnexion), découverte UDP et par balayage TCP, encodage de l'état (duel, score, bots), partie réseau de bout en bout, tournoi solo et tournoi en réseau, recherche de mise à jour, remplacement et relance d'une AppImage, installation de l'AppImage dans le menu des applications |
 | `tst_gui`    | navigation, partie solo complète au clavier, atelier, lobby entre deux fenêtres avec règles de l'hôte, ouverture d'un match de tournoi, touches configurables (sauvegarde, touche reprise à une autre action, touche réassignée utilisée en combat), tutoriel joué en entier (clic pour la visée, pauses, touches ignorées, raté de duel non compté, victoire par éjection) |
 
 ## Architecture
