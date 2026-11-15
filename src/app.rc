@@ -1,0 +1,2 @@
+// Icône de l'exécutable Windows (barre des tâches, explorateur, raccourcis).
+IDI_ICON1 ICON "../packaging/toupie-arena.ico"

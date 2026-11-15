@@ -131,7 +131,17 @@ qt_add_resources(toupie_ui "fonts"
 # Application. Exécutable, identifiants et dossier de données gardent leur nom
 # d'origine (toupie_arena) : les mises à jour automatiques des versions déjà
 # installées relancent ce fichier.
+# Logo (généré par design/gen/icon.js) : fenêtre, exécutable Windows, bundle macOS.
 qt_add_executable(toupie_arena main.cpp)
+qt_add_resources(toupie_arena "icon" PREFIX "/" BASE ui FILES ui/app-icon.png)
+if(WIN32)
+    target_sources(toupie_arena PRIVATE app.rc)
+elseif(APPLE)
+    set(ICNS "${PROJECT_SOURCE_DIR}/packaging/toupie-arena.icns")
+    target_sources(toupie_arena PRIVATE "${ICNS}")
+    set_source_files_properties("${ICNS}" PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_target_properties(toupie_arena PROPERTIES MACOSX_BUNDLE_ICON_FILE toupie-arena.icns)
+endif()
 target_link_libraries(toupie_arena PRIVATE toupie_ui)
 target_compile_definitions(toupie_arena PRIVATE TOUPIE_VERSION="${TOUPIE_VERSION}")
 set_target_properties(toupie_arena PROPERTIES

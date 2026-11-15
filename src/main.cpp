@@ -4,6 +4,7 @@
 #include "ui/Theme.h"
 
 #include <QApplication>
+#include <QIcon>
 #include <QTimer>
 
 int main(int argc, char *argv[])
@@ -15,6 +16,7 @@ int main(int argc, char *argv[])
     QApplication::setOrganizationName(QStringLiteral("ToupieArena"));
     QApplication::setApplicationDisplayName(QStringLiteral("Top Arena"));
     QApplication::setApplicationVersion(QStringLiteral(TOUPIE_VERSION));
+    QApplication::setWindowIcon(QIcon(QStringLiteral(":/app-icon.png")));
 
     // Avant toute page : catalogue, stadiums et coups sont traduits à leur création.
     toupie::Language::install(app);
