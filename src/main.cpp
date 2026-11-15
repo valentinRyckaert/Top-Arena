@@ -29,6 +29,8 @@ int main(int argc, char *argv[])
     // Vérification d'intégration (CI) : l'application démarre puis se ferme.
     if (QCoreApplication::arguments().contains(QStringLiteral("--smoke-test")))
         QTimer::singleShot(1500, &app, &QCoreApplication::quit);
+    else
+        QTimer::singleShot(0, &window, &toupie::MainWindow::offerInstallation);
 
     return app.exec();
 }

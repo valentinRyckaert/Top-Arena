@@ -60,6 +60,7 @@ private slots:
     void updateIsFoundInLatestRelease();
 #ifdef Q_OS_LINUX
     void appImageIsReplacedAndRelaunched();
+    void appImageInstallsIntoTheApplicationsMenu();
 #endif
 };
 
@@ -611,6 +612,48 @@ void TestNet::appImageIsReplacedAndRelaunched()
         return marker.open(QIODevice::ReadOnly) ? marker.readAll().trimmed() : QByteArray();
     };
     QTRY_COMPARE(launched(), QByteArray("propre")); // Lancée, sans l'environnement de l'ancienne.
+}
+
+void TestNet::appImageInstallsIntoTheApplicationsMenu()
+{
+    QTemporaryDir home;
+    QVERIFY(home.isValid());
+    // AppImage « téléchargée » : un script qui note son lancement.
+    const QString downloaded = home.filePath(QStringLiteral("Téléchargements/TopArena.AppImage"));
+    QVERIFY(QDir().mkpath(QFileInfo(downloaded).absolutePath()));
+    QFile script(downloaded);
+    QVERIFY(script.open(QIODevice::WriteOnly));
+    script.write("#!/bin/sh\ntouch \"$HOME/lancee\"\n");
+    script.close();
+
+    const QByteArray oldHome = qgetenv("HOME"), oldData = qgetenv("XDG_DATA_HOME");
+    const auto restore = qScopeGuard([&] {
+        qputenv("HOME", oldHome);
+        oldData.isNull() ? qunsetenv("XDG_DATA_HOME") : qputenv("XDG_DATA_HOME", oldData);
+        qunsetenv("APPIMAGE");
+    });
+    qputenv("HOME", home.path().toLocal8Bit());
+    qputenv("XDG_DATA_HOME", home.filePath(QStringLiteral(".local/share")).toLocal8Bit());
+    qputenv("APPIMAGE", downloaded.toLocal8Bit());
+
+    QVERIFY(Updater::canInstallAppImage());
+    QString error;
+    QVERIFY2(Updater::installAppImage(&error), qPrintable(error));
+    const QString installed = home.filePath(QStringLiteral("Applications/TopArena.AppImage"));
+    QVERIFY(QFileInfo(installed).isExecutable());
+    QFile entry(home.filePath(QStringLiteral(".local/share/applications/top-arena.desktop")));
+    QVERIFY(entry.open(QIODevice::ReadOnly));
+    const QString desktop = QString::fromUtf8(entry.readAll());
+    QVERIFY(desktop.contains(QStringLiteral("Name=Top Arena")));
+    QVERIFY(desktop.contains(QStringLiteral("Exec=\"%1\"").arg(installed)));
+    QTRY_VERIFY(QFile::exists(home.filePath(QStringLiteral("lancee")))); // La copie installée est lancée.
+
+    // Lancée depuis ~/Applications : plus rien à proposer ; l'entrée du menu est recréée si elle manque.
+    qputenv("APPIMAGE", installed.toLocal8Bit());
+    QVERIFY(!Updater::canInstallAppImage());
+    QVERIFY(entry.remove());
+    Updater::ensureDesktopEntry();
+    QVERIFY(QFile::exists(entry.fileName()));
 }
 #endif
 

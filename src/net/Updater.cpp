@@ -8,6 +8,7 @@
 #include <QJsonDocument>
 #include <QNetworkReply>
 #include <QProcess>
+#include <QStandardPaths>
 #include <QVersionNumber>
 
 #include <filesystem>
@@ -225,6 +226,91 @@ bool Updater::installAndRestart(const QString &package, QString *error)
     if (!started && error)
         *error = QObject::tr("Impossible de lancer l'installation.");
     return started;
+}
+
+namespace {
+/// Emplacement d'installation de l'AppImage (convention des AppImage) et entrée du menu.
+QString installedAppImage() { return QDir::homePath() + QStringLiteral("/Applications/TopArena.AppImage"); }
+QString desktopEntry()
+{
+    return QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation)
+           + QStringLiteral("/top-arena.desktop");
+}
+
+bool writeDesktopEntry(QString *error)
+{
+    const QString icons = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation)
+                          + QStringLiteral("/icons/hicolor/256x256/apps");
+    QDir().mkpath(icons);
+    QFile::remove(icons + QStringLiteral("/top-arena.png"));
+    QFile::copy(QStringLiteral(":/app-icon.png"), icons + QStringLiteral("/top-arena.png"));
+
+    QDir().mkpath(QFileInfo(desktopEntry()).absolutePath());
+    QFile file(desktopEntry());
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        if (error)
+            *error = file.errorString();
+        return false;
+    }
+    const QString exec = QStringLiteral("\"%1\"").arg(installedAppImage());
+    file.write(QStringLiteral("[Desktop Entry]\nType=Application\nName=Top Arena\n"
+                              "Comment=Combats de toupies en 2D, en solo contre des bots ou en réseau local\n"
+                              "Comment[en]=2D spinning top battles, solo against bots or over a local network\n"
+                              "Exec=%1\nTryExec=%2\nIcon=top-arena\nCategories=Game;ArcadeGame;\nTerminal=false\n")
+                   .arg(exec, installedAppImage())
+                   .toUtf8());
+    return true;
+}
+} // namespace
+
+bool Updater::canInstallAppImage()
+{
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
+    return false;
+#else
+    const QString appImage = qEnvironmentVariable("APPIMAGE");
+    return !appImage.isEmpty()
+           && QFileInfo(appImage).canonicalFilePath() != QFileInfo(installedAppImage()).canonicalFilePath();
+#endif
+}
+
+bool Updater::installAppImage(QString *error)
+{
+    const QString target = installedAppImage();
+    QDir().mkpath(QFileInfo(target).absolutePath());
+    // Copie à côté puis renommage : une AppImage déjà installée n'est jamais à moitié écrite.
+    const QString part = target + QStringLiteral(".part");
+    QFile::remove(part);
+    if (!QFile::copy(qEnvironmentVariable("APPIMAGE"), part)) {
+        if (error)
+            *error = QObject::tr("Impossible de copier l'application dans %1.").arg(QFileInfo(target).absolutePath());
+        return false;
+    }
+    QFile::setPermissions(part, QFile::permissions(part) | QFile::ExeOwner | QFile::ExeGroup | QFile::ExeOther);
+    std::error_code ec;
+    std::filesystem::rename(QFile::encodeName(part).toStdString(), QFile::encodeName(target).toStdString(), ec);
+    if (ec) {
+        if (error)
+            *error = QString::fromStdString(ec.message());
+        return false;
+    }
+    if (!writeDesktopEntry(error))
+        return false;
+    if (!launch(target, {})) {
+        if (error)
+            *error = QObject::tr("Impossible de lancer %1.").arg(target);
+        return false;
+    }
+    return true;
+}
+
+void Updater::ensureDesktopEntry()
+{
+#if !defined(Q_OS_WIN) && !defined(Q_OS_MACOS)
+    const QString appImage = qEnvironmentVariable("APPIMAGE");
+    if (!appImage.isEmpty() && !canInstallAppImage() && !QFile::exists(desktopEntry()))
+        writeDesktopEntry(nullptr);
+#endif
 }
 
 bool Updater::restart(QString *error)

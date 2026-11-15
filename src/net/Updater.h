@@ -48,6 +48,16 @@ public:
     /// l'instance actuelle. Sert notamment au changement de langue.
     static bool restart(QString *error);
 
+    /// Linux : AppImage lancée ailleurs que dans ~/Applications (téléchargée, par exemple) ;
+    /// on peut proposer de l'installer.
+    static bool canInstallAppImage();
+    /// Copie l'AppImage dans ~/Applications, ajoute Top Arena au menu des applications
+    /// puis lance la copie installée, qui se met ensuite à jour sur place ; l'appelant
+    /// doit quitter. False en cas d'échec.
+    static bool installAppImage(QString *error);
+    /// AppImage installée : recrée son entrée du menu des applications si elle manque.
+    static void ensureDesktopEntry();
+
 signals:
     void updateAvailable(const toupie::net::UpdateInfo &update);
     void upToDate();

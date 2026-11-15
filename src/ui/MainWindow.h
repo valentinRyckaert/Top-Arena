@@ -36,6 +36,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
+    /// Linux : propose d'installer l'AppImage dans le menu des applications (une fois).
+    void offerInstallation();
 
 protected:
     void closeEvent(QCloseEvent *event) override;

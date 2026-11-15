@@ -26,6 +26,7 @@
 #include <QVBoxLayout>
 #include <QDesktopServices>
 #include <QMessageBox>
+#include <QSettings>
 #include <QProgressDialog>
 #include <QRandomGenerator>
 #include <QPushButton>
@@ -398,6 +399,32 @@ void MainWindow::showLanMenu()
     m_lanMenu->setBusy(false);
     m_lanMenu->activate();
     showPage(m_lanMenu);
+}
+
+void MainWindow::offerInstallation()
+{
+    net::Updater::ensureDesktopEntry();
+    const QString declined = QStringLiteral("installation/declined");
+    if (!net::Updater::canInstallAppImage() || QSettings().value(declined, false).toBool())
+        return;
+    QMessageBox box(QMessageBox::Question, tr("Installer Top Arena"),
+                    tr("Installer Top Arena dans le menu des applications ?\nLe jeu sera copié dans "
+                       "~/Applications et continuera de se mettre à jour tout seul ; le fichier "
+                       "téléchargé pourra ensuite être supprimé."),
+                    QMessageBox::NoButton, this);
+    QPushButton *install = box.addButton(tr("Installer"), QMessageBox::AcceptRole);
+    box.addButton(tr("Plus tard"), QMessageBox::RejectRole);
+    QPushButton *never = box.addButton(tr("Ne plus demander"), QMessageBox::DestructiveRole);
+    box.exec();
+    if (box.clickedButton() == never)
+        QSettings().setValue(declined, true);
+    if (box.clickedButton() != install)
+        return;
+    QString error;
+    if (net::Updater::installAppImage(&error))
+        close(); // La copie installée prend le relais.
+    else
+        QMessageBox::warning(this, tr("Installer Top Arena"), tr("L'installation a échoué :\n%1").arg(error));
 }
 
 void MainWindow::checkForUpdates()

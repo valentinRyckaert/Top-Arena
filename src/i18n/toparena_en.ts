@@ -8,6 +8,14 @@
         <translation>Could not start the installation.</translation>
     </message>
     <message>
+        <source>Impossible de copier l&apos;application dans %1.</source>
+        <translation>Could not copy the application to %1.</translation>
+    </message>
+    <message>
+        <source>Impossible de lancer %1.</source>
+        <translation>Could not start %1.</translation>
+    </message>
+    <message>
         <source>Impossible de relancer le jeu.</source>
         <translation>Could not restart the game.</translation>
     </message>
@@ -1064,6 +1072,28 @@
     <message>
         <source>Lobby fermé</source>
         <translation>Lobby closed</translation>
+    </message>
+    <message>
+        <source>Installer Top Arena</source>
+        <translation>Install Top Arena</translation>
+    </message>
+    <message>
+        <source>Installer Top Arena dans le menu des applications ?
+Le jeu sera copié dans ~/Applications et continuera de se mettre à jour tout seul ; le fichier téléchargé pourra ensuite être supprimé.</source>
+        <translation>Add Top Arena to the applications menu?
+The game will be copied to ~/Applications and will keep updating itself; you can then delete the downloaded file.</translation>
+    </message>
+    <message>
+        <source>Installer</source>
+        <translation>Install</translation>
+    </message>
+    <message>
+        <source>Plus tard</source>
+        <translation>Later</translation>
+    </message>
+    <message>
+        <source>Ne plus demander</source>
+        <translation>Don&apos;t ask again</translation>
     </message>
     <message>
         <source>Recherche d&apos;une mise à jour…</source>
