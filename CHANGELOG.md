@@ -6,6 +6,32 @@ Toutes les évolutions notables de Top Arena (anciennement Toupie Arena). Le for
 
 ## [Non publié]
 
+## [2.1.0] — 2026-11-15
+
+Top Arena s'installe comme une vraie application sur les trois systèmes, a désormais son logo,
+et les toupies de base prennent des noms propres.
+
+### Nouveautés
+
+- **Installation** (les mises à jour automatiques continuent de fonctionner) :
+  - **Windows** : installateur `…-windows-x64-setup.exe`, sans droits administrateur (dossier
+    `%LOCALAPPDATA%\Programs\Top Arena`), raccourcis menu Démarrer et bureau, désinstallation
+    depuis les paramètres de Windows ;
+  - **Linux** : au premier lancement, l'AppImage propose de s'installer dans le menu des
+    applications (copie dans `~/Applications`, entrée `top-arena.desktop` et icône) ; la copie
+    installée se met ensuite à jour sur place ;
+  - **macOS** : le dmg contient « Top Arena.app » et un raccourci Applications sur lequel la
+    glisser.
+- **Logo** : Vortyx vue de biais avec sa traînée, sur fond bleu / violet ; icône de la fenêtre,
+  de l'exécutable Windows, du bundle macOS et du menu des applications Linux.
+
+### Modifications
+
+- **Toupies de base renommées**, mêmes pièces : Vortyx (ex-Cyclone Furieux), Bastaron
+  (ex-Forteresse), Celsa (ex-Éternelle), Orvane (ex-Juste Milieu), Celestia (ex-Gardienne),
+  Kyron (ex-Comète), Gorrath (ex-Colosse) et Sylphae (ex-Brise Éternelle). Ce sont des noms
+  propres : ils ne sont plus traduits et sont identiques sur PC et mobile.
+
 ## [2.0.0] — 2026-11-14
 
 Toupie Arena devient **Top Arena** : refonte visuelle complète « Holo Combat », mêlées contre
@@ -195,7 +221,8 @@ Première version publique.
 - **Atelier** pour assembler et enregistrer ses toupies.
 - **Paquets** Linux (AppImage), Windows (zip) et macOS (dmg) publiés par la CI.
 
-[Non publié]: https://github.com/valentinRyckaert/Top-Arena/compare/v2.0.0...HEAD
+[Non publié]: https://github.com/valentinRyckaert/Top-Arena/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/valentinRyckaert/Top-Arena/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/valentinRyckaert/Top-Arena/compare/v1.2.1...v2.0.0
 [1.2.1]: https://github.com/valentinRyckaert/Top-Arena/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/valentinRyckaert/Top-Arena/compare/v1.1.0...v1.2.0
