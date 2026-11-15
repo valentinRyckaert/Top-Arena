@@ -1552,38 +1552,6 @@ Download and install it? The game will restart on the new version.</translation>
         <source>Boulon Tellurique</source>
         <translation>Quake Bolt</translation>
     </message>
-    <message>
-        <source>Cyclone Furieux</source>
-        <translation>Furious Cyclone</translation>
-    </message>
-    <message>
-        <source>Forteresse</source>
-        <translation>Fortress</translation>
-    </message>
-    <message>
-        <source>Éternelle</source>
-        <translation>Eternal</translation>
-    </message>
-    <message>
-        <source>Juste Milieu</source>
-        <translation>Golden Mean</translation>
-    </message>
-    <message>
-        <source>Gardienne</source>
-        <translation>Guardian</translation>
-    </message>
-    <message>
-        <source>Comète</source>
-        <translation>Comet</translation>
-    </message>
-    <message>
-        <source>Colosse</source>
-        <translation>Colossus</translation>
-    </message>
-    <message>
-        <source>Brise Éternelle</source>
-        <translation>Eternal Breeze</translation>
-    </message>
 </context>
 <context>
     <name>toupie::PartSlot</name>

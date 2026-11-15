@@ -139,14 +139,14 @@ QList<Top> PartCatalog::presets() const
         const char *bolt;
     };
     static constexpr Recipe recipes[] = {
-        {QT_TRANSLATE_NOOP("toupie::PartCatalog", "Cyclone Furieux"), "RM2", "PI2", "P2", "B2"},   // 14 / 4 / 5   -> Attaque
-        {QT_TRANSLATE_NOOP("toupie::PartCatalog", "Forteresse"), "RM3", "PI3", "P1", "B1"},        //  4 / 14 / 5  -> Défense
-        {QT_TRANSLATE_NOOP("toupie::PartCatalog", "Éternelle"), "RM4", "PI4", "P3", "B6"},         //  4 / 4 / 15  -> Endurance
-        {QT_TRANSLATE_NOOP("toupie::PartCatalog", "Juste Milieu"), "RM5", "PI5", "P4", "B3"},      //  8 / 8 / 7   -> Équilibre
-        {QT_TRANSLATE_NOOP("toupie::PartCatalog", "Gardienne"), "RM1", "PI1", "P1", "B7"},         //  6 / 12 / 5  -> Défense
-        {QT_TRANSLATE_NOOP("toupie::PartCatalog", "Comète"), "RM9", "PI7", "P7", "B5"},            // 15 / 5 / 3   -> Attaque
-        {QT_TRANSLATE_NOOP("toupie::PartCatalog", "Colosse"), "RM10", "PI8", "P8", "B4"},          //  3 / 15 / 5  -> Défense
-        {QT_TRANSLATE_NOOP("toupie::PartCatalog", "Brise Éternelle"), "RM13", "PI9", "P9", "B3"},  //  7 / 5 / 11  -> Endurance
+        {"Vortyx", "RM2", "PI2", "P2", "B2"},   // 14 / 4 / 5   -> Attaque
+        {"Bastaron", "RM3", "PI3", "P1", "B1"}, //  4 / 14 / 5  -> Défense
+        {"Celsa", "RM4", "PI4", "P3", "B6"},    //  4 / 4 / 15  -> Endurance
+        {"Orvane", "RM5", "PI5", "P4", "B3"},   //  8 / 8 / 7   -> Équilibre
+        {"Celestia", "RM1", "PI1", "P1", "B7"}, //  6 / 12 / 5  -> Défense
+        {"Kyron", "RM9", "PI7", "P7", "B5"},    // 15 / 5 / 3   -> Attaque
+        {"Gorrath", "RM10", "PI8", "P8", "B4"}, //  3 / 15 / 5  -> Défense
+        {"Sylphae", "RM13", "PI9", "P9", "B3"}, //  7 / 5 / 11  -> Endurance
     };
 
     QList<Top> result;
@@ -156,7 +156,7 @@ QList<Top> PartCatalog::presets() const
         const auto t = find(QString::fromLatin1(recipe.tip));
         const auto b = find(QString::fromLatin1(recipe.bolt));
         if (w && m && t && b)
-            result.append(Top(translated(recipe.name), *w, *m, *t, *b));
+            result.append(Top(QString::fromUtf8(recipe.name), *w, *m, *t, *b)); // Noms propres : non traduits.
     }
     return result;
 }
