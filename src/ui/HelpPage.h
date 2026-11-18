@@ -16,12 +16,16 @@ public:
 
     /// Régénère le récapitulatif avec les touches actuelles.
     void refresh();
+    /// Licence du jeu, composants tiers et textes complets de leurs licences.
+    static QString licensesText();
 
 signals:
     void backRequested();
     void settingsRequested();
 
 private:
+    void showLicenses();
+
     QLabel *m_text = nullptr;
 };
 

@@ -59,6 +59,7 @@ class TestGui : public QObject
 private slots:
     void initTestCase();
     void menuNavigation();
+    void licensesAreShippedInTheGame();
     void soloMatchRunsToTheEnd();
     void soloMeleeAgainstSeveralBots();
     void builderSavesTopWithBolt();
@@ -105,6 +106,18 @@ void TestGui::menuNavigation()
     QVERIFY(qobject_cast<LanMenuPage *>(currentPage(window)));
     emit window.findChild<LanMenuPage *>()->backRequested();
     QCOMPARE(currentPage(window), menu);
+}
+
+void TestGui::licensesAreShippedInTheGame()
+{
+    // Textes embarqués dans l'exécutable : condition de la LGPL de Qt et de l'OFL des polices.
+    const QString text = HelpPage::licensesText();
+    for (const char *expected : {"MIT License", "Copyright (c) 2026 Valentin Ryckaert", "Qt 6 — GNU LGPL v3",
+                                 "GNU LESSER GENERAL PUBLIC LICENSE\n                       Version 3",
+                                 "GNU GENERAL PUBLIC LICENSE", "Version 2.1, February 1999",
+                                 "The Chakra Petch Project Authors", "Indian Type Foundry", "SIL OPEN FONT LICENSE"})
+        QVERIFY2(text.contains(QString::fromUtf8(expected)), expected);
+    QVERIFY(text.contains(QString::fromLatin1(qVersion())));
 }
 
 void TestGui::soloMatchRunsToTheEnd()

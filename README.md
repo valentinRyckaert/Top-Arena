@@ -433,3 +433,11 @@ packaging/  fichier .desktop et icône
 
 `toupie_core` (modèle, moteur, sessions) ne dépend que de Qt Core, `toupie_net` ajoute
 Qt Network et `toupie_ui` Qt Widgets.
+
+## Licence
+
+Le code de Top Arena est distribué sous licence [MIT](LICENSE). Les paquets publiés contiennent
+aussi Qt (LGPL v3), les polices Chakra Petch et Rajdhani (SIL OFL 1.1) et, selon le système,
+des bibliothèques système et redistribuables Microsoft : voir
+[`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md). Les textes complets des licences sont dans
+[`licenses/`](licenses) et dans le jeu (Aide > Licences).

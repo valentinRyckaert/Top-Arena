@@ -126,6 +126,20 @@ qt_add_resources(toupie_ui "fonts"
         ui/fonts/Rajdhani-Medium.ttf
         ui/fonts/Rajdhani-SemiBold.ttf
         ui/fonts/Rajdhani-Bold.ttf
+        ui/fonts/OFL-ChakraPetch.txt
+        ui/fonts/OFL-Rajdhani.txt
+)
+# Licence du jeu et des composants tiers, affichées dans Aide > Licences (joindre ces textes
+# aux paquets distribués est une condition de la LGPL de Qt et de la licence des polices).
+qt_add_resources(toupie_ui "licenses"
+    PREFIX "/"
+    BASE ..
+    FILES
+        ../LICENSE
+        ../THIRD-PARTY-NOTICES.md
+        ../licenses/LGPL-3.0.txt
+        ../licenses/GPL-3.0.txt
+        ../licenses/LGPL-2.1.txt
 )
 
 # Application. Exécutable, identifiants et dossier de données gardent leur nom

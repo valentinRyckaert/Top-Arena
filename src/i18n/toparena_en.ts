@@ -702,6 +702,14 @@
         <source>Modifier les touches…</source>
         <translation>Change key bindings…</translation>
     </message>
+    <message>
+        <source>Licences</source>
+        <translation>Licenses</translation>
+    </message>
+    <message>
+        <source>Top Arena %1 · Qt %2 (bibliothèques Qt embarquées)</source>
+        <translation>Top Arena %1 · Qt %2 (bundled Qt libraries)</translation>
+    </message>
 </context>
 <context>
     <name>toupie::LanMenuPage</name>

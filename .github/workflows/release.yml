@@ -90,7 +90,17 @@ jobs:
           export EXTRA_PLATFORM_PLUGINS="libqoffscreen.so"
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --plugin qt \
             --desktop-file packaging/toupie-arena.desktop \
-            --icon-file packaging/toupie-arena.svg --output appimage
+            --icon-file packaging/toupie-arena.svg
+          # Fichier de copyright Debian de chaque bibliothèque système embarquée (MIT, BSD, LGPL…),
+          # que leurs licences demandent de joindre ; les bibliothèques Qt n'en ont pas (hors dpkg).
+          for lib in AppDir/usr/lib/*.so*; do
+            pkg=$(dpkg -S "*/$(basename "$lib")" 2>/dev/null | head -n 1 | cut -d: -f1) || true
+            if [ -n "$pkg" ] && [ -f "/usr/share/doc/$pkg/copyright" ]; then
+              install -Dm644 "/usr/share/doc/$pkg/copyright" "AppDir/usr/share/doc/$pkg/copyright"
+            fi
+          done
+          ls AppDir/usr/share/doc
+          ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
           mv Top_Arena*.AppImage TopArena-${{ github.ref_name }}-linux-x86_64.AppImage
           ./TopArena-*.AppImage --smoke-test
 
